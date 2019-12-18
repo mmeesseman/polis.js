@@ -47,7 +47,7 @@ function getToken(){
     json: true
   };
   
-  request(options).then(function(err, res, body){
+  request(options).then(function(res){
     return JSON.parse(res).access_token;
   })
   .catch(function(err){
@@ -89,7 +89,7 @@ function getFulcrumRecord(recordId){
     contentType: "application/json",
     json: true
   };
-  request(options).then(function(err, res, body){
+  request(options).then(function(res){
     console.log(res);
     return JSON.parse(res);
   })
