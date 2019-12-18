@@ -85,6 +85,7 @@ function getFulcrumRecord(recordId){
     contentType: "application/json",
     json: true
   };
+  console.log(options.uri);
   request(options, function(err, res, body){
     console.warn(res);
     console.warn(err);
