@@ -95,6 +95,7 @@ function getFulcrumRecord(recordId){
 //creates and outlook event.
 function createEvent(payload) {
   var record = getFulcrumRecord(payload.data.id);
+  console.log(record);
   var options = {
     uri: 'https://graph.microsoft.com/v1.0/users/a0cd0923-d853-4e89-8fc6-d56d7da634d7/events',
     method: 'post',
