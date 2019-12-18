@@ -8,7 +8,7 @@ var app = express();
 
 function payloadProcessor (payload, done) {
   var pay = JSON.parse(payload);
-  console.log(pay);
+  console.log(pay.data.form_id);
   if(pay.data.form_id == 'cdaa6515-0476-4b45-8f9c-a4a93d5c404c'){
     var eventId = pay.data.form_values['6fc3'];
     if(pay.type === 'record.create'){
