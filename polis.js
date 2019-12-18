@@ -7,8 +7,7 @@ var PORT = process.env.PORT || 9000;
 var app = express();
 
 function payloadProcessor (payload, done) {
-  console.log(payload);
-  var jsonString = payload.postData.getDataAsString();
+  var jsonString = payload.postData;
   console.log(jsonString);
   var pay = JSON.parse(jsonString);
   if(pay.data.form_id == 'cdaa6515-0476-4b45-8f9c-a4a93d5c404c'){
