@@ -88,11 +88,11 @@ function createEvent(payload) {
       'Content-type': 'application/json'
     },
     'muteHttpExceptions': true,
-    'payload' : '{"Subject": "' + record.record.form_values['bba9'] 
-      + '",  "Body": { "ContentType": "HTML", "Content": "' + record.record.form_values['8841'] 
-      + '"  },  "Start": { "DateTime": "' + record.record.form_values['7650'] + 'T' + record.record.form_values['c600'] 
-      + '","TimeZone": "Eastern Standard Time" },  "End": {  "DateTime": "' + record.record.form_values['a5f2'] + 'T' + record.record.form_values['c73f'] 
-      + '", "TimeZone": "Eastern Standard Time" },  "Attendees": [ {  "EmailAddress": { "Address": "' + record.record.form_values['07f1'] 
+    'payload' : '{"Subject": "' + record.form_values['bba9'] 
+      + '",  "Body": { "ContentType": "HTML", "Content": "' + record.form_values['8841'] 
+      + '"  },  "Start": { "DateTime": "' + record.form_values['7650'] + 'T' + record.form_values['c600'] 
+      + '","TimeZone": "Eastern Standard Time" },  "End": {  "DateTime": "' + record.form_values['a5f2'] + 'T' + record.form_values['c73f'] 
+      + '", "TimeZone": "Eastern Standard Time" },  "Attendees": [ {  "EmailAddress": { "Address": "' + record.form_values['07f1'] 
       + '", "Name": "Test Here" }, "Type": "Required" }  ]}'
   };
   var url = 'https://graph.microsoft.com/v1.0/users/a0cd0923-d853-4e89-8fc6-d56d7da634d7/events';
@@ -111,11 +111,11 @@ function updateEvent(eventId, payload) {
       'Content-type': 'application/json'
     },
     'muteHttpExceptions': true,
-    'payload' : '{"Subject": "' + record.record.form_values['bba9'] 
-       + '",  "Body": { "ContentType": "HTML", "Content": "' + record.record.form_values['8841'] 
-       + '"  },  "Start": { "DateTime": "' + record.record.form_values['7650'] + 'T' + record.record.form_values['c600'] 
-       + '","TimeZone": "Eastern Standard Time" },  "End": {  "DateTime": "' + record.record.form_values['a5f2'] + 'T' + record.record.form_values['c73f'] 
-       + '", "TimeZone": "Eastern Standard Time" },  "Attendees": [ {  "EmailAddress": { "Address": "' + record.record.form_values['07f1'] 
+    'payload' : '{"Subject": "' + record.form_values['bba9'] 
+       + '",  "Body": { "ContentType": "HTML", "Content": "' + record.form_values['8841'] 
+       + '"  },  "Start": { "DateTime": "' + record.form_values['7650'] + 'T' + record.form_values['c600'] 
+       + '","TimeZone": "Eastern Standard Time" },  "End": {  "DateTime": "' + record.form_values['a5f2'] + 'T' + record.form_values['c73f'] 
+       + '", "TimeZone": "Eastern Standard Time" },  "Attendees": [ {  "EmailAddress": { "Address": "' + record.form_values['07f1'] 
        + '", "Name": "Test Here" }, "Type": "Required" }  ]}'
   };
   var updateurl = 'https://graph.microsoft.com/v1.0/users/a0cd0923-d853-4e89-8fc6-d56d7da634d7/events/' + eventId;
