@@ -95,6 +95,7 @@ function getFulcrumRecord(recordId){
 
 //creates and outlook event.
 function createEvent(payload) {
+  console.log(payload.data.id);
   var record = getFulcrumRecord(payload.data.id);
   console.warn(record);
   var options = {
