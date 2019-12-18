@@ -50,29 +50,6 @@ function getToken(){
   return JSON.parse(response).access_token;
 }
 
-// function to handle webhooks.
-function doPost(e){
-  return handleResponse(e);
-}
-
-// handles the payload.
-function handleResponse(e){
-  var jsonString = e.postData.getDataAsString();
-  var payload = JSON.parse(jsonString);
-  if(payload.data.form_id == 'cdaa6515-0476-4b45-8f9c-a4a93d5c404c'){
-    var eventId = payload.data.form_values['6fc3'];
-    if(payload.type === 'record.create'){
-      createEvent(payload);
-    }
-    else if(payload.type === 'record.update'){
-      updateEvent(eventId, payload);
-    }
-    else if(payload.type === 'record.delete'){
-      deleteEvent(eventId);
-    }
-  }
-}
-
 // updates a fulcrum record with the event id.
 function updateFulcrumRecord(recordId, eventId){
   var fulcrumAPIkey ='7c9b2ddb2e74c59dee9b357c22651586676eeed86b084021c2cdd4a81ffc21c8bdd8840e969924ae';
