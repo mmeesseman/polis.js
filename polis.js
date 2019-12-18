@@ -86,8 +86,8 @@ function getFulcrumRecord(recordId){
     json: true
   };
   request(options, function(err, res, body){
-    console.log(res);
-    console.log(err);
+    console.warn(res);
+    console.warn(err);
     return JSON.parse(res);
   });
 }
