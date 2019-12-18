@@ -69,64 +69,75 @@ function updateFulcrumRecord(recordId, eventId){
 // retrives a fulcrum record. 
 function getFulcrumRecord(recordId){
   var fulcrumAPIkey ='7c9b2ddb2e74c59dee9b357c22651586676eeed86b084021c2cdd4a81ffc21c8bdd8840e969924ae';
-  var url = "https://api.fulcrumapp.com/api/v2/records/" + recordId + ".json?token=" + fulcrumAPIkey;
+  //var url = "https://api.fulcrumapp.com/api/v2/records/" + recordId + ".json?token=" + fulcrumAPIkey;
   var options = {
+    "url": "https://api.fulcrumapp.com/api/v2/records/" + recordId + ".json?token=" + fulcrumAPIkey,
     "method": "GET",
     "contentType": "application/json"
   };
-  var recordJSON = request.get(url, options);
-  console.log(recordJSON);
-  return recordJSON;
+  request.get(options, function(err, res, body){
+    console.log(res);
+    return JSON.parse(res);
+
+  });
 }
 
 //creates and outlook event.
 function createEvent(payload) {
   var record = getFulcrumRecord(payload.data.id);
   var options = {
+    "url": 'https://graph.microsoft.com/v1.0/users/a0cd0923-d853-4e89-8fc6-d56d7da634d7/events',
     'Method': 'post',
     headers: {
       'Authorization': 'Bearer ' + getToken(),
       'Content-type': 'application/json'
     },
     'muteHttpExceptions': true,
-    'payload' : '{"Subject": "' + record.form_values['bba9'] 
-      + '",  "Body": { "ContentType": "HTML", "Content": "' + record.form_values['8841'] 
-      + '"  },  "Start": { "DateTime": "' + record.form_values['7650'] + 'T' + record.form_values['c600'] 
-      + '","TimeZone": "Eastern Standard Time" },  "End": {  "DateTime": "' + record.form_values['a5f2'] + 'T' + record.form_values['c73f'] 
-      + '", "TimeZone": "Eastern Standard Time" },  "Attendees": [ {  "EmailAddress": { "Address": "' + record.form_values['07f1'] 
+    'payload' : '{"Subject": "' + record.record.form_values['bba9'] 
+      + '",  "Body": { "ContentType": "HTML", "Content": "' + record.record.form_values['8841'] 
+      + '"  },  "Start": { "DateTime": "' + record.record.form_values['7650'] + 'T' + record.record.form_values['c600'] 
+      + '","TimeZone": "Eastern Standard Time" },  "End": {  "DateTime": "' + record.record.form_values['a5f2'] + 'T' + record.record.form_values['c73f'] 
+      + '", "TimeZone": "Eastern Standard Time" },  "Attendees": [ {  "EmailAddress": { "Address": "' + record.record.form_values['07f1'] 
       + '", "Name": "Test Here" }, "Type": "Required" }  ]}'
   };
-  var url = 'https://graph.microsoft.com/v1.0/users/a0cd0923-d853-4e89-8fc6-d56d7da634d7/events';
-  var response = request.post(url, options);
-  var result = response;
-  updateFulcrumRecord(payload.data.id, result['id']);
+  //var url = 'https://graph.microsoft.com/v1.0/users/a0cd0923-d853-4e89-8fc6-d56d7da634d7/events';
+  request.post(options, function(err, res, body){
+    var result = JSON.parse(res);
+    updateFulcrumRecord(payload.data.id, result['id']);
+  });
+  
 }
 
 // updates and outlook event
 function updateEvent(eventId, payload) {
   var record = getFulcrumRecord(payload.data.id);
   var updateoptions = {
+    "url": 'https://graph.microsoft.com/v1.0/users/a0cd0923-d853-4e89-8fc6-d56d7da634d7/events/' + eventId,
     'method': 'patch',
     headers: {
       'Authorization': 'Bearer ' + getToken(),
       'Content-type': 'application/json'
     },
     'muteHttpExceptions': true,
-    'payload' : '{"Subject": "' + record.form_values['bba9'] 
-       + '",  "Body": { "ContentType": "HTML", "Content": "' + record.form_values['8841'] 
-       + '"  },  "Start": { "DateTime": "' + record.form_values['7650'] + 'T' + record.form_values['c600'] 
-       + '","TimeZone": "Eastern Standard Time" },  "End": {  "DateTime": "' + record.form_values['a5f2'] + 'T' + record.form_values['c73f'] 
-       + '", "TimeZone": "Eastern Standard Time" },  "Attendees": [ {  "EmailAddress": { "Address": "' + record.form_values['07f1'] 
+    'payload' : '{"Subject": "' + record.record.form_values['bba9'] 
+       + '",  "Body": { "ContentType": "HTML", "Content": "' + record.record.form_values['8841'] 
+       + '"  },  "Start": { "DateTime": "' + record.record.form_values['7650'] + 'T' + record.record.form_values['c600'] 
+       + '","TimeZone": "Eastern Standard Time" },  "End": {  "DateTime": "' + record.record.form_values['a5f2'] + 'T' + record.record.form_values['c73f'] 
+       + '", "TimeZone": "Eastern Standard Time" },  "Attendees": [ {  "EmailAddress": { "Address": "' + record.record.form_values['07f1'] 
        + '", "Name": "Test Here" }, "Type": "Required" }  ]}'
   };
-  var updateurl = 'https://graph.microsoft.com/v1.0/users/a0cd0923-d853-4e89-8fc6-d56d7da634d7/events/' + eventId;
-  var response = request.patch(updateurl, updateoptions);
-  var result = response; 
+  //var updateurl = 'https://graph.microsoft.com/v1.0/users/a0cd0923-d853-4e89-8fc6-d56d7da634d7/events/' + eventId;
+  request.patch(updateoptions, function(err, res, body){
+    var result = JSON.parse(res);
+    console.log(res);
+  });
+  
 }
 
 // deletes and outlook event
 function deleteEvent(eventId) {
   var deleteoptions = {
+    "url": 'https://graph.microsoft.com/v1.0/users/a0cd0923-d853-4e89-8fc6-d56d7da634d7/events/' + eventId,
     'method': 'delete',
     headers: {
       'Authorization': 'Bearer ' + getToken(),
@@ -136,8 +147,11 @@ function deleteEvent(eventId) {
     'muteHttpExceptions': true
   };
   var deleteurl = 'https://graph.microsoft.com/v1.0/users/a0cd0923-d853-4e89-8fc6-d56d7da634d7/events/' + eventId;
-  var response = request.delete(deleteurl, deleteoptions);
-  var result = response;
+  request.delete(deleteoptions, function(err, res, body){
+    var result = JSON.parse(res);
+    console.log(result);
+  });
+  
 }
 
 var fulcrumMiddlewareConfig = {
