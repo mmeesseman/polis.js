@@ -26,7 +26,7 @@ function payloadProcessor (payload, done) {
 
   console.log('Payload:');
   console.log(payload);
-  done()
+  done();
 }
 
 //global variables.
@@ -168,7 +168,7 @@ function deleteEvent(eventId) {
 }
 
 var fulcrumMiddlewareConfig = {
-  actions: ['record.create', 'record.update'],
+  actions: ['record.create', 'record.update', 'record.delete'],
   processor: payloadProcessor
 };
 
@@ -176,7 +176,7 @@ app.use('/', fulcrumMiddleware(fulcrumMiddlewareConfig));
 
 app.get('/', function (req, res) {
   res.send('<html><head><title>Polis.js</title></head><body><h2>polis.js</h2><p>Up and Running!</p></body></html>');
-})
+});
 
 app.listen(PORT, function () {
   console.log('Listening on port ' + PORT);
