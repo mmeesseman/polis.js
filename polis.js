@@ -47,11 +47,9 @@ function getToken(){
     json: true
   };
   
-  request(options).then(function(res){
+  request(options, function(err, res, body){
+    console.log(err);
     return JSON.parse(res).access_token;
-  })
-  .catch(function(err){
-    console.log('ERROR IN GETTING TOKEN');
   });
   
 }
@@ -71,11 +69,9 @@ function updateFulcrumRecord(recordId, eventId){
     body: JSON.stringify(record), 
     json: true
   };
-  request(options).then(function(res){
+  request(options, function(err, res, body){
     console.log(JSON.parse(res));
-  })
-  .catch(function(err){
-    console.log('ERROR IN UPDATE RECORD');
+    console.log(err);
   });
 }
 
@@ -89,12 +85,10 @@ function getFulcrumRecord(recordId){
     contentType: "application/json",
     json: true
   };
-  request(options).then(function(res){
+  request(options, function(err, res, body){
     console.log(res);
+    console.log(err);
     return JSON.parse(res);
-  })
-  .catch(function (err){
-    console.log('ERROR IN GET FULCRUM RECORD');
   });
 }
 
@@ -117,12 +111,10 @@ function createEvent(payload) {
       + '", "Name": "Test Here" }, "Type": "Required" }  ]}'
   };
   //var url = 'https://graph.microsoft.com/v1.0/users/a0cd0923-d853-4e89-8fc6-d56d7da634d7/events';
-  request(options).then(function(res){
+  request(options, function(err, res, body){
+    console.log(err);
     var result = JSON.parse(res);
     updateFulcrumRecord(payload.data.id, result['id']);
-  })
-  .catch(function(err){
-    console.log('ERROR IN CREATE EVENT');
   });
   
 }
@@ -145,12 +137,10 @@ function updateEvent(eventId, payload) {
        + '", "Name": "Test Here" }, "Type": "Required" }  ]}'
   };
   //var updateurl = 'https://graph.microsoft.com/v1.0/users/a0cd0923-d853-4e89-8fc6-d56d7da634d7/events/' + eventId;
-  request(updateoptions).then(function(res){
+  request(updateoptions, function(err, res, body){
     var result = JSON.parse(res);
     console.log(res);
-  })
-  .catch(function (err) {
-    console.log('ERROR IN UPDATE EVENT');
+    console.log(err);
   });
   
 }
@@ -168,12 +158,10 @@ function deleteEvent(eventId) {
     json: true
   };
   //var deleteurl = 'https://graph.microsoft.com/v1.0/users/a0cd0923-d853-4e89-8fc6-d56d7da634d7/events/' + eventId;
-  request(deleteoptions).then(function(res){
+  request(deleteoptions, function(err, res, body){
     var result = JSON.parse(res);
+    console.log(err);
     console.log(result);
-  })
-  .catch(function(err){
-    console.log("ERROR IN DELETE EVENT");
   });
   
 }
