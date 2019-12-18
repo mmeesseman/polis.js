@@ -75,14 +75,13 @@ function getFulcrumRecord(recordId){
     "contentType": "application/json"
   };
   var recordJSON = request.get(url, options);
+  console.log(recordJSON);
   return recordJSON;
 }
 
 //creates and outlook event.
 function createEvent(payload) {
-  console.log(payload.data.id);
   var record = getFulcrumRecord(payload.data.id);
-  console.log(record);
   var options = {
     'Method': 'post',
     headers: {
