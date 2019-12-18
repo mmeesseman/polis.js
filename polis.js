@@ -7,24 +7,20 @@ var PORT = process.env.PORT || 9000;
 var app = express();
 
 function payloadProcessor (payload, done) {
-  //var pay = JSON.parse(payload);
-  console.log(payload.data.form_id);
-  if(pay.data.form_id == 'cdaa6515-0476-4b45-8f9c-a4a93d5c404c'){
-    var eventId = pay.data.form_values['6fc3'];
-    if(pay.type === 'record.create'){
-      createEvent(pay);
+
+  if(payload.data.form_id == 'cdaa6515-0476-4b45-8f9c-a4a93d5c404c'){
+    var eventId = payload.data.form_values['6fc3'];
+    if(payload.type === 'record.create'){
+      createEvent(payload);
     }
-    else if(pay.type === 'record.update'){
+    else if(payload.type === 'record.update'){
       updateEvent(eventId, pay);
     }
-    else if(paytype === 'record.delete'){
+    else if(payload.type === 'record.delete'){
       deleteEvent(eventId);
     }
   }
 
-
-  console.log('Payload:');
-  console.log(payload);
   done();
 }
 
