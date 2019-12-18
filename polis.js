@@ -47,7 +47,7 @@ function getToken(){
   }
   
   var response = request.post(url, options);
-  return JSON.parse(response).access_token;
+  return response.access_token;
 }
 
 // updates a fulcrum record with the event id.
@@ -75,7 +75,7 @@ function getFulcrumRecord(recordId){
     "contentType": "application/json"
   };
   var recordJSON = request.get(url, options);
-  return JSON.parse(recordJSON);
+  return recordJSON;
 }
 
 //creates and outlook event.
@@ -97,7 +97,7 @@ function createEvent(payload) {
   };
   var url = 'https://graph.microsoft.com/v1.0/users/a0cd0923-d853-4e89-8fc6-d56d7da634d7/events';
   var response = request.post(url, options);
-  var result = JSON.parse(response.getContentText());
+  var result = response;
   updateFulcrumRecord(payload.data.id, result['id']);
 }
 
@@ -120,7 +120,7 @@ function updateEvent(eventId, payload) {
   };
   var updateurl = 'https://graph.microsoft.com/v1.0/users/a0cd0923-d853-4e89-8fc6-d56d7da634d7/events/' + eventId;
   var response = request.patch(updateurl, updateoptions);
-  var result = JSON.parse(response.getContentText()); 
+  var result = response; 
 }
 
 // deletes and outlook event
@@ -136,7 +136,7 @@ function deleteEvent(eventId) {
   };
   var deleteurl = 'https://graph.microsoft.com/v1.0/users/a0cd0923-d853-4e89-8fc6-d56d7da634d7/events/' + eventId;
   var response = request.delete(deleteurl, deleteoptions);
-  var result = JSON.parse(response.getResponseCode());
+  var result = response;
 }
 
 var fulcrumMiddlewareConfig = {
