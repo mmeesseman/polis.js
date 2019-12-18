@@ -35,20 +35,23 @@ var GRANT_TYPE = 'client_credentials';
 function getToken(){
   //var url = 'https://login.microsoftonline.com/52980fd8-4432-4ca2-8be0-7b5fc957bd83/oauth2/v2.0/token';
   var options = {
-    "url": 'https://login.microsoftonline.com/52980fd8-4432-4ca2-8be0-7b5fc957bd83/oauth2/v2.0/token',
-    "method": "POST",
-    "contentType": "application/x-www-form-urlencoded",
-    'muteHttpExceptions': true,
-    "payload": {
+    uri: 'https://login.microsoftonline.com/52980fd8-4432-4ca2-8be0-7b5fc957bd83/oauth2/v2.0/token',
+    method: "POST",
+    contentType: "application/x-www-form-urlencoded",
+    body: {
       "client_id": CLIENT_ID,
       "scope": API_SCOPE,
       "client_secret": CLIENT_SECRET,
       "grant_type": GRANT_TYPE
-    }
+    }, 
+    json: true
   };
   
-  request(options, function(err, res, body){
+  request(options).then(function(err, res, body){
     return JSON.parse(res).access_token;
+  })
+  .catch(function(err){
+    console.log('ERROR IN GETTING TOKEN');
   });
   
 }
@@ -62,13 +65,17 @@ function updateFulcrumRecord(recordId, eventId){
   // PUT updated record to Fulcrum
   //var url = "https://api.fulcrumapp.com/api/v2/records/" + recordId + ".json?token=" + fulcrumAPIkey;
   var options = {
-    "url": "https://api.fulcrumapp.com/api/v2/records/" + recordId + ".json?token=" + fulcrumAPIkey,
-    "method": "PUT",
-    "contentType": "application/json",
-    "payload": JSON.stringify(record)
+    uri: "https://api.fulcrumapp.com/api/v2/records/" + recordId + ".json?token=" + fulcrumAPIkey,
+    method: "PUT",
+    contentType: "application/json",
+    body: JSON.stringify(record), 
+    json: true
   };
-  var recordJSON = request(options, function(err, res, body){
+  request(options).then(function(res){
     console.log(JSON.parse(res));
+  })
+  .catch(function(err){
+    console.log('ERROR IN UPDATE RECORD');
   });
 }
 
@@ -77,14 +84,17 @@ function getFulcrumRecord(recordId){
   var fulcrumAPIkey ='7c9b2ddb2e74c59dee9b357c22651586676eeed86b084021c2cdd4a81ffc21c8bdd8840e969924ae';
   //var url = "https://api.fulcrumapp.com/api/v2/records/" + recordId + ".json?token=" + fulcrumAPIkey;
   var options = {
-    "url": "https://api.fulcrumapp.com/api/v2/records/" + recordId + ".json?token=" + fulcrumAPIkey,
-    "method": "GET",
-    "contentType": "application/json"
+    uri: "https://api.fulcrumapp.com/api/v2/records/" + recordId + ".json?token=" + fulcrumAPIkey,
+    method: "GET",
+    contentType: "application/json",
+    json: true
   };
-  request(options, function(err, res, body){
+  request(options).then(function(err, res, body){
     console.log(res);
     return JSON.parse(res);
-
+  })
+  .catch(function (err){
+    console.log('ERROR IN GET FULCRUM RECORD');
   });
 }
 
@@ -92,14 +102,14 @@ function getFulcrumRecord(recordId){
 function createEvent(payload) {
   var record = getFulcrumRecord(payload.data.id);
   var options = {
-    "url": 'https://graph.microsoft.com/v1.0/users/a0cd0923-d853-4e89-8fc6-d56d7da634d7/events',
-    'Method': 'post',
+    uri: 'https://graph.microsoft.com/v1.0/users/a0cd0923-d853-4e89-8fc6-d56d7da634d7/events',
+    method: 'post',
     headers: {
       'Authorization': 'Bearer ' + getToken(),
       'Content-type': 'application/json'
     },
-    'muteHttpExceptions': true,
-    'payload' : '{"Subject": "' + record.record.form_values['bba9'] 
+    json: true,
+    body : '{"Subject": "' + record.record.form_values['bba9'] 
       + '",  "Body": { "ContentType": "HTML", "Content": "' + record.record.form_values['8841'] 
       + '"  },  "Start": { "DateTime": "' + record.record.form_values['7650'] + 'T' + record.record.form_values['c600'] 
       + '","TimeZone": "Eastern Standard Time" },  "End": {  "DateTime": "' + record.record.form_values['a5f2'] + 'T' + record.record.form_values['c73f'] 
@@ -107,9 +117,12 @@ function createEvent(payload) {
       + '", "Name": "Test Here" }, "Type": "Required" }  ]}'
   };
   //var url = 'https://graph.microsoft.com/v1.0/users/a0cd0923-d853-4e89-8fc6-d56d7da634d7/events';
-  request(options, function(err, res, body){
+  request(options).then(function(res){
     var result = JSON.parse(res);
     updateFulcrumRecord(payload.data.id, result['id']);
+  })
+  .catch(function(err){
+    console.log('ERROR IN CREATE EVENT');
   });
   
 }
@@ -118,14 +131,13 @@ function createEvent(payload) {
 function updateEvent(eventId, payload) {
   var record = getFulcrumRecord(payload.data.id);
   var updateoptions = {
-    "url": 'https://graph.microsoft.com/v1.0/users/a0cd0923-d853-4e89-8fc6-d56d7da634d7/events/' + eventId,
-    'method': 'patch',
+    uri: 'https://graph.microsoft.com/v1.0/users/a0cd0923-d853-4e89-8fc6-d56d7da634d7/events/' + eventId,
+    method: 'PATCH',
     headers: {
       'Authorization': 'Bearer ' + getToken(),
       'Content-type': 'application/json'
     },
-    'muteHttpExceptions': true,
-    'payload' : '{"Subject": "' + record.record.form_values['bba9'] 
+    body : '{"Subject": "' + record.record.form_values['bba9'] 
        + '",  "Body": { "ContentType": "HTML", "Content": "' + record.record.form_values['8841'] 
        + '"  },  "Start": { "DateTime": "' + record.record.form_values['7650'] + 'T' + record.record.form_values['c600'] 
        + '","TimeZone": "Eastern Standard Time" },  "End": {  "DateTime": "' + record.record.form_values['a5f2'] + 'T' + record.record.form_values['c73f'] 
@@ -133,9 +145,12 @@ function updateEvent(eventId, payload) {
        + '", "Name": "Test Here" }, "Type": "Required" }  ]}'
   };
   //var updateurl = 'https://graph.microsoft.com/v1.0/users/a0cd0923-d853-4e89-8fc6-d56d7da634d7/events/' + eventId;
-  request(updateoptions, function(err, res, body){
+  request(updateoptions).then(function(res){
     var result = JSON.parse(res);
     console.log(res);
+  })
+  .catch(function (err) {
+    console.log('ERROR IN UPDATE EVENT');
   });
   
 }
@@ -143,19 +158,22 @@ function updateEvent(eventId, payload) {
 // deletes and outlook event
 function deleteEvent(eventId) {
   var deleteoptions = {
-    "url": 'https://graph.microsoft.com/v1.0/users/a0cd0923-d853-4e89-8fc6-d56d7da634d7/events/' + eventId,
-    'method': 'delete',
+    uri: 'https://graph.microsoft.com/v1.0/users/a0cd0923-d853-4e89-8fc6-d56d7da634d7/events/' + eventId,
+    method: 'DELETE',
     headers: {
       'Authorization': 'Bearer ' + getToken(),
       'Content-type': 'application/json',
       'Accept': 'application/json'
     },
-    'muteHttpExceptions': true
+    json: true
   };
-  var deleteurl = 'https://graph.microsoft.com/v1.0/users/a0cd0923-d853-4e89-8fc6-d56d7da634d7/events/' + eventId;
-  request(deleteoptions, function(err, res, body){
+  //var deleteurl = 'https://graph.microsoft.com/v1.0/users/a0cd0923-d853-4e89-8fc6-d56d7da634d7/events/' + eventId;
+  request(deleteoptions).then(function(res){
     var result = JSON.parse(res);
     console.log(result);
+  })
+  .catch(function(err){
+    console.log("ERROR IN DELETE EVENT");
   });
   
 }
