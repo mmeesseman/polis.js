@@ -87,17 +87,14 @@ function getFulcrumRecord(recordId){
   };
   console.log(options.uri);
   request(options, function(err, res, body){
-    console.log(res);
-    console.warn(res);
-    console.warn(err);
-    return JSON.parse(res.body);
+    return res.body;
   });
 }
 
 //creates and outlook event.
 function createEvent(payload) {
   var record = getFulcrumRecord(payload.data.id);
-  console.warn(record);
+  console.log(record);
   var options = {
     uri: 'https://graph.microsoft.com/v1.0/users/a0cd0923-d853-4e89-8fc6-d56d7da634d7/events',
     method: 'post',
