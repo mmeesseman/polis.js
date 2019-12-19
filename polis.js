@@ -87,6 +87,7 @@ function getFulcrumRecord(recordId){
   };
   console.log(options.uri);
   request(options, function(err, res, body){
+    console.log(res.body);
     return res.body;
   });
 }
