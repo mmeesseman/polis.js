@@ -87,6 +87,7 @@ function getFulcrumRecord(recordId){
   };
   console.log(options.uri);
   request(options, function(err, res, body){
+    console.log(res);
     console.warn(res);
     console.warn(err);
     return JSON.parse(res);
@@ -95,7 +96,6 @@ function getFulcrumRecord(recordId){
 
 //creates and outlook event.
 function createEvent(payload) {
-  console.log(payload);
   var record = getFulcrumRecord(payload.data.id);
   console.warn(record);
   var options = {
