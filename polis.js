@@ -49,7 +49,7 @@ function getToken(){
   
   request(options, function(err, res, body){
     console.log(err);
-    return JSON.parse(res).access_token;
+    return JSON.parse(res.body).access_token;
   });
   
 }
@@ -90,7 +90,7 @@ function getFulcrumRecord(recordId){
     console.log(res);
     console.warn(res);
     console.warn(err);
-    return JSON.parse(res);
+    return JSON.parse(res.body);
   });
 }
 
@@ -116,7 +116,7 @@ function createEvent(payload) {
   //var url = 'https://graph.microsoft.com/v1.0/users/a0cd0923-d853-4e89-8fc6-d56d7da634d7/events';
   request(options, function(err, res, body){
     console.log(err);
-    var result = JSON.parse(res);
+    var result = JSON.parse(res.body);
     updateFulcrumRecord(payload.data.id, result['id']);
   });
   
@@ -141,7 +141,7 @@ function updateEvent(eventId, payload) {
   };
   //var updateurl = 'https://graph.microsoft.com/v1.0/users/a0cd0923-d853-4e89-8fc6-d56d7da634d7/events/' + eventId;
   request(updateoptions, function(err, res, body){
-    var result = JSON.parse(res);
+    var result = JSON.parse(res.body);
     console.log(res);
     console.log(err);
   });
@@ -162,7 +162,7 @@ function deleteEvent(eventId) {
   };
   //var deleteurl = 'https://graph.microsoft.com/v1.0/users/a0cd0923-d853-4e89-8fc6-d56d7da634d7/events/' + eventId;
   request(deleteoptions, function(err, res, body){
-    var result = JSON.parse(res);
+    var result = JSON.parse(res).body;
     console.log(err);
     console.log(result);
   });
