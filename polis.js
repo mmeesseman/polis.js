@@ -1,5 +1,5 @@
 var express = require('express');
-var request = require('request');
+var request = require('node-fetch');
 var fulcrumMiddleware = require('connect-fulcrum-webhook');
 
 var PORT = process.env.PORT || 9000;
@@ -33,9 +33,8 @@ var GRANT_TYPE = 'client_credentials';
 
 // function to get new token for server to server apps. returns key.
 function getToken(){
-  //var url = 'https://login.microsoftonline.com/52980fd8-4432-4ca2-8be0-7b5fc957bd83/oauth2/v2.0/token';
+  var url = 'https://login.microsoftonline.com/52980fd8-4432-4ca2-8be0-7b5fc957bd83/oauth2/v2.0/token';
   var options = {
-    uri: 'https://login.microsoftonline.com/52980fd8-4432-4ca2-8be0-7b5fc957bd83/oauth2/v2.0/token',
     method: "POST",
     contentType: "application/x-www-form-urlencoded",
     body: {
@@ -47,10 +46,16 @@ function getToken(){
     json: true
   };
   
-  request(options, function(err, res, body){
-    console.log(err);
-    return res.body.access_token;
-  });
+  const getData = async url => {
+    try {
+      const response = await request(url, options);
+      const json = await response.json();
+      return json.access_token;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  getData();
   
 }
 
@@ -61,35 +66,48 @@ function updateFulcrumRecord(recordId, eventId){
   record.record.form_values["6fc3"] = eventId;
   
   // PUT updated record to Fulcrum
-  //var url = "https://api.fulcrumapp.com/api/v2/records/" + recordId + ".json?token=" + fulcrumAPIkey;
+  var url = "https://api.fulcrumapp.com/api/v2/records/" + recordId + ".json?token=" + fulcrumAPIkey;
   var options = {
-    uri: "https://api.fulcrumapp.com/api/v2/records/" + recordId + ".json?token=" + fulcrumAPIkey,
     method: "PUT",
     contentType: "application/json",
     body: JSON.stringify(record), 
     json: true
   };
-  request(options, function(err, res, body){
-    console.log(res);
-    console.log(err);
-  });
+
+  const getData = async url => {
+    try {
+      const response = await request(url, options);
+      const json = await response.json();
+      console.log(json);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  getData();
 }
 
 // retrives a fulcrum record. 
 function getFulcrumRecord(recordId){
   var fulcrumAPIkey ='7c9b2ddb2e74c59dee9b357c22651586676eeed86b084021c2cdd4a81ffc21c8bdd8840e969924ae';
-  //var url = "https://api.fulcrumapp.com/api/v2/records/" + recordId + ".json?token=" + fulcrumAPIkey;
+  var url = "https://api.fulcrumapp.com/api/v2/records/" + recordId + ".json?token=" + fulcrumAPIkey;
   var options = {
-    uri: "https://api.fulcrumapp.com/api/v2/records/" + recordId + ".json?token=" + fulcrumAPIkey,
     method: "GET",
     contentType: "application/json",
     json: true
   };
   console.log(options.uri);
-  request(options, function(err, res, body){
-    console.log(res.body);
-    return res.body;
-  });
+  
+  const getData = async url => {
+    try {
+      const response = await request(url, options);
+      const json = await response.json();
+      return json;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  getData();
+  
 }
 
 //creates and outlook event.
@@ -97,7 +115,6 @@ function createEvent(payload) {
   var record = getFulcrumRecord(payload.data.id);
   console.log(record);
   var options = {
-    uri: 'https://graph.microsoft.com/v1.0/users/a0cd0923-d853-4e89-8fc6-d56d7da634d7/events',
     method: 'post',
     headers: {
       'Authorization': 'Bearer ' + getToken(),
@@ -111,12 +128,19 @@ function createEvent(payload) {
       + '", "TimeZone": "Eastern Standard Time" },  "Attendees": [ {  "EmailAddress": { "Address": "' + record.record.form_values['07f1'] 
       + '", "Name": "Test Here" }, "Type": "Required" }  ]}'
   };
-  //var url = 'https://graph.microsoft.com/v1.0/users/a0cd0923-d853-4e89-8fc6-d56d7da634d7/events';
-  request(options, function(err, res, body){
-    console.log(err);
-    var result = res.body;
-    updateFulcrumRecord(payload.data.id, result['id']);
-  });
+  var url = 'https://graph.microsoft.com/v1.0/users/a0cd0923-d853-4e89-8fc6-d56d7da634d7/events';
+  
+  const getData = async url => {
+    try {
+      const response = await request(url, options);
+      const json = await response.json();
+      var result = json;
+      updateFulcrumRecord(payload.data.id, result.id);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  getData();
   
 }
 
@@ -124,7 +148,6 @@ function createEvent(payload) {
 function updateEvent(eventId, payload) {
   var record = getFulcrumRecord(payload.data.id);
   var updateoptions = {
-    uri: 'https://graph.microsoft.com/v1.0/users/a0cd0923-d853-4e89-8fc6-d56d7da634d7/events/' + eventId,
     method: 'PATCH',
     headers: {
       'Authorization': 'Bearer ' + getToken(),
@@ -137,19 +160,24 @@ function updateEvent(eventId, payload) {
        + '", "TimeZone": "Eastern Standard Time" },  "Attendees": [ {  "EmailAddress": { "Address": "' + record.record.form_values['07f1'] 
        + '", "Name": "Test Here" }, "Type": "Required" }  ]}'
   };
-  //var updateurl = 'https://graph.microsoft.com/v1.0/users/a0cd0923-d853-4e89-8fc6-d56d7da634d7/events/' + eventId;
-  request(updateoptions, function(err, res, body){
-    var result = res.body;
-    console.log(res);
-    console.log(err);
-  });
+  var updateurl = 'https://graph.microsoft.com/v1.0/users/a0cd0923-d853-4e89-8fc6-d56d7da634d7/events/' + eventId;
+  
+  const getData = async url => {
+    try {
+      const response = await request(updateurl, updateoptions);
+      const json = await response.json();
+      console.log(json);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  getData();
   
 }
 
 // deletes and outlook event
 function deleteEvent(eventId) {
   var deleteoptions = {
-    uri: 'https://graph.microsoft.com/v1.0/users/a0cd0923-d853-4e89-8fc6-d56d7da634d7/events/' + eventId,
     method: 'DELETE',
     headers: {
       'Authorization': 'Bearer ' + getToken(),
@@ -158,12 +186,18 @@ function deleteEvent(eventId) {
     },
     json: true
   };
-  //var deleteurl = 'https://graph.microsoft.com/v1.0/users/a0cd0923-d853-4e89-8fc6-d56d7da634d7/events/' + eventId;
-  request(deleteoptions, function(err, res, body){
-    var result = res.body;
-    console.log(err);
-    console.log(result);
-  });
+  var deleteurl = 'https://graph.microsoft.com/v1.0/users/a0cd0923-d853-4e89-8fc6-d56d7da634d7/events/' + eventId;
+  
+  const getData = async url => {
+    try {
+      const response = await request(deleteurl, deleteoptions);
+      const json = await response.json();
+      console.log(json);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  getData();
   
 }
 
