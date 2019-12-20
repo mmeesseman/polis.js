@@ -4,7 +4,8 @@
   "dependencies": {
     "connect-fulcrum-webhook": "^1.0.1",
     "express": "^4.13.4", 
-    "request": "^2.88.0"
+    "request": "^2.88.0", 
+    "node-fetch": "^2.6.0"
   },
   "engines": {
     "node": "0.12.x",
