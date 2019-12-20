@@ -100,7 +100,8 @@ function getFulcrumRecord(recordId){
     try {
       const response = await request(url);
       const json = await response.json();
-      console.log(json);
+      console.log(typeof json);
+      console.log(json.record.version);
       return json;
     } catch (error) {
       console.log(error);
