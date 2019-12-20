@@ -46,7 +46,7 @@ function getToken(){
     json: true
   };
   
-  const getData = async (url, options) => {
+  const getData = async function(url, options) {
     try {
       const response = await request(url, options);
       const json = await response.json();
@@ -74,7 +74,7 @@ function updateFulcrumRecord(recordId, eventId){
     json: true
   };
 
-  const getData = async (url, options) => {
+  const getData = async function(url, options) {
     try {
       const response = await request(url, options);
       const json = await response.json();
@@ -97,7 +97,7 @@ function getFulcrumRecord(recordId){
   };
   console.log(options.uri);
   
-  const getData = async url => {
+  const getData = async function(url) {
     try {
       const response = await request(url);
       const json = await response.json();
@@ -130,7 +130,7 @@ function createEvent(payload) {
   };
   var url = 'https://graph.microsoft.com/v1.0/users/a0cd0923-d853-4e89-8fc6-d56d7da634d7/events';
   
-  const getData = async (url, options) => {
+  const getData = async function(url, options) {
     try {
       const response = await request(url, options);
       const json = await response.json();
@@ -162,7 +162,7 @@ function updateEvent(eventId, payload) {
   };
   var updateurl = 'https://graph.microsoft.com/v1.0/users/a0cd0923-d853-4e89-8fc6-d56d7da634d7/events/' + eventId;
   
-  const getData = async (updateurl, updateoptions) => {
+  const getData = async function(updateurl, updateoptions) {
     try {
       const response = await request(updateurl, updateoptions);
       const json = await response.json();
@@ -188,7 +188,7 @@ function deleteEvent(eventId) {
   };
   var deleteurl = 'https://graph.microsoft.com/v1.0/users/a0cd0923-d853-4e89-8fc6-d56d7da634d7/events/' + eventId;
   
-  const getData = async (deleteurl, deleteoptions) => {
+  const getData = async function(deleteurl, deleteoptions){
     try {
       const response = await request(deleteurl, deleteoptions);
       const json = await response.json();
