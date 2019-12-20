@@ -99,7 +99,7 @@ function getFulcrumRecord(recordId){
   
   const getData = async url => {
     try {
-      const response = await request(url, options);
+      const response = await request(url);
       const json = await response.json();
       return json;
     } catch (error) {
