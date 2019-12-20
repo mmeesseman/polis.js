@@ -46,7 +46,7 @@ function getToken(){
     json: true
   };
   
-  const getData = async function(url, options) {
+  var getData = async function(url, options) {
     try {
       const response = await request(url, options);
       const json = await response.json();
