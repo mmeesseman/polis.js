@@ -46,7 +46,7 @@ function getToken(){
     json: true
   };
   
-  const getData = async url => {
+  const getData = async (url, options) => {
     try {
       const response = await request(url, options);
       const json = await response.json();
@@ -55,7 +55,7 @@ function getToken(){
       console.log(error);
     }
   };
-  getData();
+  getData(url, options);
   
 }
 
@@ -74,7 +74,7 @@ function updateFulcrumRecord(recordId, eventId){
     json: true
   };
 
-  const getData = async url => {
+  const getData = async (url, options) => {
     try {
       const response = await request(url, options);
       const json = await response.json();
@@ -83,7 +83,7 @@ function updateFulcrumRecord(recordId, eventId){
       console.log(error);
     }
   };
-  getData();
+  getData(url, options);
 }
 
 // retrives a fulcrum record. 
@@ -106,7 +106,7 @@ function getFulcrumRecord(recordId){
       console.log(error);
     }
   };
-  getData();
+  getData(url);
   
 }
 
@@ -130,7 +130,7 @@ function createEvent(payload) {
   };
   var url = 'https://graph.microsoft.com/v1.0/users/a0cd0923-d853-4e89-8fc6-d56d7da634d7/events';
   
-  const getData = async url => {
+  const getData = async (url, options) => {
     try {
       const response = await request(url, options);
       const json = await response.json();
@@ -140,7 +140,7 @@ function createEvent(payload) {
       console.log(error);
     }
   };
-  getData();
+  getData(url, options);
   
 }
 
@@ -162,7 +162,7 @@ function updateEvent(eventId, payload) {
   };
   var updateurl = 'https://graph.microsoft.com/v1.0/users/a0cd0923-d853-4e89-8fc6-d56d7da634d7/events/' + eventId;
   
-  const getData = async url => {
+  const getData = async (updateurl, updateoptions) => {
     try {
       const response = await request(updateurl, updateoptions);
       const json = await response.json();
@@ -171,7 +171,7 @@ function updateEvent(eventId, payload) {
       console.log(error);
     }
   };
-  getData();
+  getData(updateurl, updateoptions);
   
 }
 
@@ -188,7 +188,7 @@ function deleteEvent(eventId) {
   };
   var deleteurl = 'https://graph.microsoft.com/v1.0/users/a0cd0923-d853-4e89-8fc6-d56d7da634d7/events/' + eventId;
   
-  const getData = async url => {
+  const getData = async (deleteurl, deleteoptions) => {
     try {
       const response = await request(deleteurl, deleteoptions);
       const json = await response.json();
@@ -197,7 +197,7 @@ function deleteEvent(eventId) {
       console.log(error);
     }
   };
-  getData();
+  getData(deleteurl, deleteoptions);
   
 }
 
