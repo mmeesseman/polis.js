@@ -95,7 +95,7 @@ function getFulcrumRecord(recordId){
     contentType: "application/json",
     json: true
   };
-  
+  console.log(url);
   const getData = async function(url) {
     try {
       const response = await request(url);
