@@ -113,8 +113,8 @@ function getFulcrumRecord(recordId){
 }
 
 //creates and outlook event.
-function createEvent(payload) {
-  var record = getFulcrumRecord(payload.data.id);
+async function createEvent(payload) {
+  var record = await getFulcrumRecord(payload.data.id);
   var options = {
     method: 'post',
     headers: {
