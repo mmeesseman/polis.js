@@ -100,8 +100,6 @@ function getFulcrumRecord(recordId){
     try {
       const response = await request(url);
       const json = await response.json();
-      console.log(typeof json);
-      console.log(json.record.version);
       return json;
     } catch (error) {
       console.log(error);
@@ -114,8 +112,9 @@ function getFulcrumRecord(recordId){
 
 //creates and outlook event.
 async function createEvent(payload) {
+  console.log('before get record');
   var record = await getFulcrumRecord(payload.data.id);
-  console.log(record);
+  console.log('after get record');
   var options = {
     method: 'post',
     headers: {
